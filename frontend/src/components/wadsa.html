@@ -1,0 +1,85 @@
+<!-- filepath: c:\Users\jann kevin\Desktop\ADVENCH PORTAL\frontend\src\components\ClientDetails.vue -->
+<template>
+  <v-app>
+    <v-main>
+      <v-container>
+        <v-row justify="center">
+          <v-col cols="12" md="8">
+            <v-card>
+              <v-card-title>
+                <v-row justify="space-between" align="center" class="w-100">
+                  <span class="text-h5 font-weight-bold">Full Client Details</span>
+                  <v-btn icon @click="goBack">
+                    <v-icon>mdi-arrow-left</v-icon>
+                  </v-btn>
+                </v-row>
+              </v-card-title>
+              <v-card-text>
+                <v-row>
+                  <v-col cols="12">
+                    <h2 class="text-h4 font-weight-bold">{{ client.last_name }}, {{ client.first_name }}</h2>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="12">
+                    <h3 class="text-h6 font-weight-bold text-success">Personal Details</h3>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="6">
+                    <p><strong>Birth Date:</strong> {{ client.dob }}</p>
+                    <p><strong>Address:</strong> {{ client.address }}</p>
+                    <p><strong>Email:</strong> {{ client.email }}</p>
+                    <p><strong>Occupation:</strong> {{ client.job_details }}</p>
+                  </v-col>
+                  <v-col cols="6">
+                    <p><strong>Phone Number:</strong> {{ client.phone_number }}</p>
+                    <p><strong>Civil Status:</strong> {{ client.civil_status || 'N/A' }}</p>
+                    <p><strong>Monthly Income:</strong> {{ client.monthly_income }}</p>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-main>
+  </v-app>
+</template>
+
+<script>
+import axios from 'axios';
+
+export default {
+  data() {
+    return {
+      client: {},
+    };
+  },
+  created() {
+    const clientId = this.$route.params.id;
+    this.fetchClientDetails(clientId);
+  },
+  methods: {
+    fetchClientDetails(clientId) {
+      axios
+        .get(`http://localhost:3000/api/clients/${clientId}`)
+        .then((response) => {
+          this.client = response.data;
+        })
+        .catch((error) => {
+          console.error('Error fetching client details:', error);
+        });
+    },
+    goBack() {
+      this.$router.go(-1);
+    },
+  },
+};
+</script>
+
+<style>
+.text-success {
+  color: #4CAF50;
+}
+</style>
